@@ -823,7 +823,7 @@ function callTrack(n){
   if(C.endpoint&&navigator.sendBeacon){try{navigator.sendBeacon(C.endpoint,JSON.stringify({
     tur:'qongiroq',nom:n.nom,raqam:n.show,
     plita:(det.classList.contains('on')&&cur)?cur.kod:'',
-    manba:SRC.s||"to'g'ridan-to'g'ri",kampaniya:SRC.c||''}));}catch(e){}}
+    manba:SRC.s||"to'g'ridan-to'g'ri",kampaniya:SRC.c||'',sahifa:location.href.split('#')[0]}));}catch(e){}}
 }
 
 /* --- tanlangan plitalar --- */
