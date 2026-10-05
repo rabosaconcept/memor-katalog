@@ -995,12 +995,20 @@ async function send(){
   if(!C.endpoint){done(P,true);return;}
   const btn=$('#lgo'),er=$('#lerr');er.style.display='none';
   busy=true;btn.disabled=true;btn.textContent='Yuborilmoqda…';
+  const body=JSON.stringify(P);
+  const post=(o,ms)=>{const ac=new AbortController(),tm=setTimeout(()=>ac.abort(),ms);
+    return fetch(C.endpoint,Object.assign({method:'POST',body:body,signal:ac.signal},o)).finally(()=>clearTimeout(tm));};
   try{
-    const ac=new AbortController(),tm=setTimeout(()=>ac.abort(),20000);
-    const r=await fetch(C.endpoint,{method:'POST',body:JSON.stringify(P),signal:ac.signal});
-    clearTimeout(tm);
-    let j={};try{j=await r.json();}catch(e){}
-    if(!r.ok||j.ok===false)throw new Error(j.error||('HTTP '+r.status));
+    let r=null,net=false;
+    try{r=await post({},60000);}catch(e){net=true;}
+    if(net){
+      /* Javobni o'qib bo'lmadi (sekin server yoki brauzer cheklovi). Server bir xil arizani
+         10 daqiqa ichida ikki marta yozmaydi, shuning uchun qayta yuborish xavfsiz. */
+      await post({mode:'no-cors'},30000);
+    }else{
+      let j={};try{j=await r.json();}catch(e){}
+      if(!r.ok||j.ok===false)throw new Error(j.error||('HTTP '+r.status));
+    }
     done(P,false);
   }catch(err){
     er.textContent='Ariza yuborilmadi. Internetni tekshirib, qayta urinib ko\'ring.';
