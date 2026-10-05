@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="uz"><head><meta name="robots" content="noindex"><script>(function(){try{var x=new URLSearchParams(location.search).get('xodim');if(x==='1')localStorage.setItem('memor_xodim','1');if(x==='0')localStorage.removeItem('memor_xodim');if(localStorage.getItem('memor_xodim')==='1')document.documentElement.classList.add('xodim');}catch(e){}})();</script><meta charset="utf-8">
+<html lang="uz"><head><meta name="robots" content="noindex"><script>(function(){try{var x=new URLSearchParams(location.search).get('xodim');if(x==='1')localStorage.setItem('memor_xodim','1');if(x==='0')localStorage.removeItem('memor_xodim');if(localStorage.getItem('memor_xodim')==='1')document.documentElement.classList.add('xodim');}catch(e){}})();</script><script>(function(){var S={"muxiddin": {"ism": "Muxiddin", "tel": "+998955357700", "tg": "muxdnnn"}},k=null,q=null;try{q=new URLSearchParams(location.search).get('s');}catch(e){}if(q&&S[q.toLowerCase()])k=q.toLowerCase();try{if(q==='0')localStorage.removeItem('memor_sotuvchi');else if(k)localStorage.setItem('memor_sotuvchi',k);if(!k&&q!=='0')k=localStorage.getItem('memor_sotuvchi');}catch(e){}if(k&&S[k]){window.__SOT=S[k];document.documentElement.classList.add('sotuvchi');}})();</script><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MEMOR tiles — Keramik plita katalogi</title>
 <meta name="theme-color" content="#18181a">
@@ -238,6 +238,17 @@ dd{margin:0;font-weight:600;font-size:14.5px;text-align:right}
   html:not(.xodim) .dwrap{padding-bottom:96px}
 }
 .xodim .lbar,.xodim .lq,.xodim .lpq{display:none!important}
+/* sotuvchi rejimi (?s=...): ariza formasi yo'q, faqat shu sotuvchiga qo'ng'iroq / Telegram */
+.sotuvchi .lq,.sotuvchi .lpq{display:none!important}
+.lbar a.lbtn{text-decoration:none}
+.lbar .lcall.pri{background:var(--gold);color:#18181a;border-color:var(--gold)}
+.lsq{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;margin-top:18px;
+  padding:15px 18px;background:var(--gold);color:#18181a;border:0;font:inherit;font-weight:700;
+  font-size:15px;cursor:pointer;text-decoration:none;box-sizing:border-box}
+.lspq{display:block;width:100%;margin-top:16px;padding:14px;background:var(--gold);color:#18181a;
+  border:0;font:inherit;font-weight:700;font-size:14.5px;cursor:pointer;text-align:center;
+  text-decoration:none;box-sizing:border-box}
+.xodim .lsq,.xodim .lspq{display:none!important}
 .lq{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;margin-top:18px;
   padding:15px 18px;background:var(--gold);color:#18181a;border:0;font:inherit;font-weight:700;
   font-size:15px;cursor:pointer}
@@ -770,10 +781,63 @@ window.addEventListener('load',function(){
 <div class="lead" id="lead" role="dialog" aria-modal="true" aria-labelledby="lh"><div class="lw" id="lw"></div></div>
 <script>window.LEAD_CFG={"endpoint": "https://script.google.com/macros/s/AKfycbxF0Y1ctj7N0ztaUaOx9ysidi23YGovAcFaqUIpnLknzt9DNkiU90vk-7De87PF27Nl/exec?lead=1", "pixel": "", "tel": [{"nom": "Call-markaz", "raqam": "+998778329999"}], "phoneSvg": "<svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z\"/></svg>", "viloyatlar": ["Toshkent shahri", "Toshkent viloyati", "Andijon viloyati", "Buxoro viloyati", "Farg'ona viloyati", "Jizzax viloyati", "Xorazm viloyati", "Namangan viloyati", "Navoiy viloyati", "Qashqadaryo viloyati", "Samarqand viloyati", "Sirdaryo viloyati", "Surxondaryo viloyati", "Qoraqalpog'iston Respublikasi"], "xonalar": ["Vannaxona", "Oshxona", "Zal", "Koridor", "Hovli", "Tijorat obyekti"]};</script>
 <script>
+
+/* ===== Sotuvchi rejimi: mijoz do'konchining shaxsiy havolasidan kirgan (?s=...) =====
+   Ariza formasi va botga hech narsa yuborilmaydi. Pastda shu do'konchining raqami va Telegrami. */
+function sotuvchiRejimi(S,C){
+  const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  let d=String(S.tel||'').replace(/\D/g,'');if(d.length===9)d='998'+d;
+  const show=d.length===12?'+'+d.slice(0,3)+' '+d.slice(3,5)+' '+d.slice(5,8)+' '+d.slice(8,10)+' '+d.slice(10,12):'+'+d;
+  const tg=String(S.tg||'').replace(/^@/,'').trim();
+  const ism=String(S.ism||'').trim()||'Menejer';
+  const BR=/memor/i.test(location.pathname)?'MEMOR ':/rabosa/i.test(location.pathname)?'RABOSA ':'';
+  const TG_SVG='<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M21.9 4.3 18.8 19c-.2 1-.8 1.3-1.7.8l-4.6-3.4-2.2 2.1c-.3.3-.5.5-1 .5l.3-4.7 8.6-7.8c.4-.3-.1-.5-.6-.2L6.9 13 2.3 11.6c-1-.3-1-1 .2-1.5l18-6.9c.8-.3 1.6.2 1.4 1.1z"/></svg>';
+  function matn(){
+    try{
+      if(typeof det!=='undefined'&&det.classList.contains('on')&&typeof cur!=='undefined'&&cur)
+        return 'Salom! '+BR+'katalogidagi '+cur.kod+' plitasi bo\'yicha savolim bor.';
+      if(typeof SEL!=='undefined'&&SEL.size&&typeof D!=='undefined'){
+        const L=D.filter(x=>SEL.has(x.id)).map(x=>{const v=typeof QTY!=='undefined'?String(QTY[x.id]||'').trim():'';
+          return x.kod+(v?' — '+v+' m²':'');});
+        return 'Salom! '+BR+'katalogidan tanlagan plitalarim:\n'+L.join('\n');
+      }
+    }catch(e){}
+    return 'Salom! '+BR+'katalogini ko\'rdim, savolim bor.';
+  }
+  const tgHref=()=>'https://t.me/'+encodeURIComponent(tg)+'?text='+encodeURIComponent(matn());
+  const bar=document.getElementById('lbar');
+  if(!bar||(!d&&!tg))return;
+  bar.innerHTML=(d?'<a class="lcall'+(tg?'':' pri')+'" id="lcall" href="tel:+'+d+'" aria-label="'+esc(ism)+'ga qo\'ng\'iroq">'+
+      (C.phoneSvg||'')+'<span class="m">'+esc(ism)+'</span><span class="d">'+esc(ism)+' · '+show+'</span></a>':'')+
+    (tg?'<a class="lbtn" id="ltg" href="#" target="_blank" rel="noopener">'+TG_SVG+'<span>Telegram\'da yozish</span></a>':'');
+  const T=document.getElementById('ltg');
+  if(T){T.href=tgHref();T.addEventListener('click',()=>{T.href=tgHref();});}
+  /* mahsulot sahifasi: "Shu plita haqida yozish" */
+  if(typeof open_==='function'){
+    const _o=open_;
+    open_=function(id,nh){
+      _o(id,nh);
+      const dl=document.querySelector('#dwrap .dmain dl');if(!dl)return;
+      const a=document.createElement('a');a.className='lsq';
+      if(tg){a.href=tgHref();a.target='_blank';a.rel='noopener';
+        a.innerHTML=TG_SVG+'<span>Shu plita haqida '+esc(ism)+'ga yozish</span>';
+        a.addEventListener('click',()=>{a.href=tgHref();});}
+      else{a.href='tel:+'+d;a.innerHTML=(C.phoneSvg||'')+'<span>'+esc(ism)+'ga qo\'ng\'iroq qilish</span>';}
+      dl.after(a);
+    };
+  }
+  /* tanlanganlar paneli: "Tanlanganlarni yuborish" */
+  const prow=document.querySelector('#panel .prow');
+  if(prow&&tg){const a=document.createElement('a');a.className='lspq';a.target='_blank';a.rel='noopener';
+    a.textContent='Tanlanganlarni '+ism+'ga yuborish';a.href=tgHref();
+    a.addEventListener('click',()=>{a.href=tgHref();});prow.before(a);}
+}
+
 (function(){
 const C=window.LEAD_CFG||{};
 const LK='memor_lead_me', MK='memor_manba', SK='memor_lead_sent';
 if(document.documentElement.classList.contains('xodim'))return;   /* xodimlar: forma yo'q */
+if(window.__SOT){sotuvchiRejimi(window.__SOT,C);return;}            /* do'konchining shaxsiy havolasi */
 let SENT=false;
 try{const t=+localStorage.getItem(SK);SENT=t>0&&(Date.now()-t)<30*864e5;}catch(e){}
 const PENDING=new Set();
