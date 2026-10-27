@@ -1,5 +1,5 @@
 // MEMOR katalogi — internetsiz ishlash uchun
-const C = 'memor-katalog-v1791175495';
+const C = 'memor-katalog-v1793108100';
 self.addEventListener('install', e => self.skipWaiting());
 self.addEventListener('activate', e => e.waitUntil(
   caches.keys().then(ks => Promise.all(
